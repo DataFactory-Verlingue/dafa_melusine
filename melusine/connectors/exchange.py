@@ -1,3 +1,7 @@
+from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
+BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
+
+
 import logging
 import re
 
