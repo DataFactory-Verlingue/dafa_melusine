@@ -339,6 +339,8 @@ class MetaAttachmentType(BaseEstimator, TransformerMixin):
         attached_types = []
 
         try:
+            if type(x) == str:
+                x = eval(x)
             for file in x:
                 match = re.findall(r".*\.(.*)", file)
                 if match:
