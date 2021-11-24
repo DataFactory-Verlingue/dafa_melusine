@@ -310,15 +310,6 @@ class ExchangeConnector:
 
         all_new_data = (
             base_folder.all()
-            .only(
-                "message_id",
-                "datetime_sent",
-                "sender",
-                "to_recipients",
-                "subject",
-                "text_body",
-                "attachments",
-            )
             .order_by(order)[:max_emails]
         )
 
