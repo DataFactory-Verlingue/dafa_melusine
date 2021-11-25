@@ -101,11 +101,11 @@ def phraser_on_clean_text(row, phraser):
     --------
         >>> import pandas as pd
         >>> data = pd.read_pickle('./tutorial/data/emails_anonymized.pickle')
-        >>> from melusine.nlp_tools.phraser import phraser_on_header
+        >>> from melusine.nlp_tools.phraser import phraser_on_clean_text
         >>> from melusine.nlp_tools.phraser import Phraser
-        >>> # data contains a 'clean_header' column
+        >>> # data contains a 'clean_text' column
         >>> phraser = Phraser(columns='clean_text').load(filepath)  # noqa
-        >>> data.apply(phraser_on_header, axis=1)  # apply to all samples
+        >>> data.apply(phraser_on_clean_text, axis=1)  # apply to all samples
 
     """
     clean_text = phraser_on_text(row["clean_text"], phraser)
