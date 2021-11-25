@@ -81,6 +81,38 @@ def phraser_on_header(row, phraser):
     return clean_header
 
 
+def phraser_on_clean_text(row, phraser):
+    """Applies phraser on cleaned text.
+
+    To be used with methods such as: `apply(func, axis=1)` or
+    `apply_by_multiprocessing(func, axis=1, **kwargs)`.
+
+    Parameters
+    ----------
+    row : row of pd.Dataframe
+
+    phraser : Phraser instance,
+
+    Returns
+    -------
+    pd.Series
+
+    Examples
+    --------
+        >>> import pandas as pd
+        >>> data = pd.read_pickle('./tutorial/data/emails_anonymized.pickle')
+        >>> from melusine.nlp_tools.phraser import phraser_on_header
+        >>> from melusine.nlp_tools.phraser import Phraser
+        >>> # data contains a 'clean_header' column
+        >>> phraser = Phraser(columns='clean_text').load(filepath)  # noqa
+        >>> data.apply(phraser_on_header, axis=1)  # apply to all samples
+
+    """
+    clean_text = phraser_on_text(row["clean_text"], phraser)
+
+    return clean_text
+
+
 def phraser_on_text(text, phraser):
     """Returns text with phrased words.
 
