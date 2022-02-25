@@ -212,7 +212,8 @@ class Dummifier(BaseEstimator, TransformerMixin):
         X_ = pd.get_dummies(
             X,
             columns=[
-                col for col in self.columns_to_dummify if col != "attachment_type"
+                # We add receivers here
+                col for col in self.columns_to_dummify if (col != "attachment_type" and col != "receivers")
             ],
             prefix_sep="__",
             dummy_na=False,
@@ -220,7 +221,22 @@ class Dummifier(BaseEstimator, TransformerMixin):
 
         dummies_ = tuple([col + "__" for col in self.columns_to_dummify])
 
-        if "attachment_type" in self.columns_to_dummify:
+        # We modify to add receivers here
+        if ("receivers" in self.columns_to_dummify and "attachment_type" in self.columns_to_dummify):
+            X_receivers = pd.get_dummies(
+                X["receivers"].apply(pd.Series).stack().astype(int)
+            ).sum(level=0)
+            X_receivers = X_receivers.add_prefix("receivers__")
+            X_attachment = pd.get_dummies(
+                X["attachment_type"].apply(pd.Series).stack().astype(int)
+            ).sum(level=0)
+            X_attachment = X_attachment.add_prefix("attachment_type__")
+            self.dummy_features = [
+                c
+                for c in pd.concat([X_, X_attachment, X_receivers], axis=1)
+                if c.startswith(dummies_)
+            ]
+        elif "attachment_type" in self.columns_to_dummify:
             X_attachment = pd.get_dummies(
                 X["attachment_type"].apply(pd.Series).stack().astype(int)
             ).sum(level=0)
@@ -260,13 +276,25 @@ class Dummifier(BaseEstimator, TransformerMixin):
         X_ = pd.get_dummies(
             X_,
             columns=[
-                col for col in self.columns_to_dummify if col != "attachment_type"
+                # We add receivers here 
+                col for col in self.columns_to_dummify if (col != "attachment_type" and col != "receivers")
             ],
             prefix_sep="__",
             dummy_na=False,
         )
 
-        if "attachment_type" in self.columns_to_dummify:
+        # we modify for receivers here
+        if ("receivers" in self.columns_to_dummify and "attachment_type" in self.columns_to_dummify):
+            X_receivers = pd.get_dummies(
+                X_["receivers"].apply(pd.Series).stack().astype(int)
+            ).sum(level=0)
+            X_receivers = X_receivers.add_prefix("receivers__")
+            X_attachment = pd.get_dummies(
+                X_["attachment_type"].apply(pd.Series).stack().astype(int)
+            ).sum(level=0)
+            X_attachment = X_attachment.add_prefix("attachment_type__")
+            X_ = pd.concat([X_, X_attachment, X_receivers], axis=1)
+        elif "attachment_type" in self.columns_to_dummify:
             X_attachment = pd.get_dummies(
                 X_["attachment_type"].apply(pd.Series).stack().astype(int)
             ).sum(level=0)
