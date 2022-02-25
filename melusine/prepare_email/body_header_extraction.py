@@ -14,8 +14,12 @@ def extract_last_body(row):
     str
 
     """
-    last_message_dict = row["structured_body"][0]
-    last_body = extract_body(last_message_dict)
+    if row["structured_body"] != []:
+        last_message_dict = row["structured_body"][0]
+        last_body = extract_body(last_message_dict)
+    # If the email structure is not adapted with regex and returns an empy list, we give the value "empty" to last_body
+    else:
+        last_body = "empty"
 
     return last_body
 
