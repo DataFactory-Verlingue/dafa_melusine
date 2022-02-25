@@ -339,6 +339,9 @@ class MetaAttachmentType(BaseEstimator, TransformerMixin):
         attached_types = []
 
         try:
+            # We had an eval function to correct the bug where the list of attachment file was in a String
+            if type(x) == str:
+                x = eval(x)
             for file in x:
                 match = re.findall(r".*\.(.*)", file)
                 if match:
