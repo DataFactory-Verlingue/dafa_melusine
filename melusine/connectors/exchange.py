@@ -365,7 +365,7 @@ class ExchangeConnector:
             attachments_list = [i.name for i in email_item.attachments]
         
         # Modification to deal with draft in arborescence
-        if email_item.datetime_sent != None:
+        if email_item.datetime_sent != None and email_item.sender != None:
             email_dict = {
                 "message_id": email_item.message_id,
                 "body": email_item.text_body or "",
