@@ -379,7 +379,7 @@ class ExchangeConnector:
             # There is a draft in the emails
             email_dict = {
                 "message_id": email_item.message_id,
-                "body": email_item.text_body or "",
+                "body": email_item.body or "",
                 "header": email_item.subject or "",
                 "date": None,
                 "from": None,
